@@ -10,6 +10,7 @@ import io.github.h2kb.repository.EntryRepository;
 import io.github.h2kb.repository.NumberRepository;
 import io.github.h2kb.repository.PhoneBookRepository;
 import io.github.h2kb.repository.UserRepository;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,17 @@ public class MainController {
         return "Saved";
     }
 
+    @GetMapping(path = "/get_user")
+    public @ResponseBody
+    User getUser(@RequestParam String id) throws NotFoundException {
+        Optional<User> optionalUser = userRepository.findById(Integer.parseInt(id));
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
+        } else {
+            throw new NotFoundException("User with id " + id + " is not found.");
+        }
+    }
+
     @PostMapping(path = "/add_number")
     public @ResponseBody
     String addNewNumber(@RequestParam String ownerId, @RequestParam EntryType entryType, @RequestParam String phoneNumber,
@@ -59,7 +71,7 @@ public class MainController {
         return "Saved";
     }
 
-    @GetMapping(path = "/all")
+    @GetMapping(path = "/get_all_users")
     public @ResponseBody
     Iterable<User> getAllUser() {
         return userRepository.findAll();
