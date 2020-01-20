@@ -1,6 +1,6 @@
-package io.github.h2kb.entities;
+package io.github.h2kb.entity;
 
-import io.github.h2kb.enums.EntryType;
+import io.github.h2kb.entity.enums.EntryType;
 
 import javax.persistence.*;
 
@@ -23,31 +23,24 @@ public class Entry {
     @Enumerated(EnumType.ORDINAL)
     private EntryType entryType;
 
-//    public void setEntryType(String entryType) {
-//        this.type = entryType;
-//    }
-
-    public void setPhoneNote(String name) {
-        this.name = name;
+    public Entry() {
     }
 
-//    public void setPhoneNumber(Integer phoneNumber) {
-//        this.phoneNumber = phoneNumber;
-//    }
+    public Entry(PhoneBook phoneBook, String name, EntryType entryType) {
+        this.phoneBook = phoneBook;
+        this.name = name;
+        this.entryType = entryType;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Integer getId() {
         return id;
     }
 
-//    public String getEntryType() {
-//        return type;
-//    }
-
     public String getPhoneNote() {
         return name;
     }
-
-//    public Integer getPhoneNumber() {
-//        return phoneNumber;
-//    }
 }

@@ -1,4 +1,4 @@
-package io.github.h2kb.entities;
+package io.github.h2kb.entity;
 
 import javax.persistence.*;
 
@@ -17,18 +17,15 @@ public class User {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "login", nullable = false)
+    @Column(name = "login", nullable = false, unique = true)
     private String login;
 
-    public void setFirstName(String firstName) {
+    public User() {
+    }
+
+    public User(String firstName, String lastName, String login) {
         this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public void setLogin(String login) {
         this.login = login;
     }
 

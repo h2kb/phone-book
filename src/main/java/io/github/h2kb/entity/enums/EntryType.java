@@ -1,4 +1,4 @@
-package io.github.h2kb.enums;
+package io.github.h2kb.entity.enums;
 
 public enum  EntryType {
     HUMAN,
