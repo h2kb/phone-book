@@ -3,6 +3,7 @@ package io.github.h2kb.entity;
 import io.github.h2kb.entity.enums.EntryType;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "entry")
@@ -19,6 +20,9 @@ public class Entry {
     @ManyToOne
     @JoinColumn(name = "phone_book_id", nullable = false, foreignKey = @ForeignKey(name = "phone_book_id"))
     private PhoneBook phoneBook;
+
+    @OneToMany(mappedBy = "entry", fetch = FetchType.EAGER)
+    private Collection<Number> numbers;
 
     @Enumerated(EnumType.ORDINAL)
     private EntryType entryType;
@@ -42,5 +46,17 @@ public class Entry {
 
     public String getPhoneNote() {
         return name;
+    }
+
+    public PhoneBook getPhoneBook() {
+        return phoneBook;
+    }
+
+    public EntryType getEntryType() {
+        return entryType;
+    }
+
+    public Collection<Number> getNumbers() {
+        return numbers;
     }
 }

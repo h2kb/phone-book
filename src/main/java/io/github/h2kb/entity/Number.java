@@ -31,4 +31,16 @@ public class Number {
         this.number = number;
         this.numberType = numberType;
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public NumberType getNumberType() {
+        return numberType;
+    }
 }
