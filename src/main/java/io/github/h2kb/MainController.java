@@ -58,6 +58,25 @@ public class MainController {
         }
     }
 
+    @PostMapping(path = "update_user")
+    public @ResponseBody
+    ResponseEntity<User> updateUser(@RequestParam String id, @RequestParam String firstName, @RequestParam String lastName) {
+        User user;
+        Optional<User> optionalUser = userRepository.findById(Integer.parseInt(id));
+
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
+        } else {
+            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+        }
+
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+
+        userRepository.save(user);
+        return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
+
     @DeleteMapping(path = "delete_user")
     public @ResponseBody
     ResponseEntity<User> deleteUser(@RequestParam String id) {
