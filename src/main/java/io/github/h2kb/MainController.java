@@ -10,7 +10,6 @@ import io.github.h2kb.repository.EntryRepository;
 import io.github.h2kb.repository.NumberRepository;
 import io.github.h2kb.repository.PhoneBookRepository;
 import io.github.h2kb.repository.UserRepository;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,14 +47,17 @@ public class MainController {
 
     @GetMapping(path = "/get_user")
     public @ResponseBody
-    User getUser(@RequestParam String id) throws NotFoundException {
+    ResponseEntity<User> getUser(@RequestParam String id) {
+        User user;
         Optional<User> optionalUser = userRepository.findById(Integer.parseInt(id));
 
         if (optionalUser.isPresent()) {
-            return optionalUser.get();
+            user = optionalUser.get();
         } else {
-            throw new NotFoundException("User with id " + id + " is not found.");
+            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
+
+        return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
     @PostMapping(path = "update_user")
@@ -90,10 +92,7 @@ public class MainController {
         }
 
         Optional<PhoneBook> optionalPhoneBook = phoneBookRepository.findByOwner(user);
-
-        if (optionalPhoneBook.isPresent()) {
-            phoneBookRepository.delete(optionalPhoneBook.get());
-        }
+        optionalPhoneBook.ifPresent(phoneBook -> phoneBookRepository.delete(phoneBook));
 
         userRepository.delete(user);
         return new ResponseEntity<User>(user, HttpStatus.OK);
@@ -128,13 +127,9 @@ public class MainController {
         }
 
         Optional<Number> optionalNumber = numberRepository.findByEntry(entry);
-
-        if (optionalNumber.isPresent()) {
-            numberRepository.delete(optionalNumber.get());
-        }
+        optionalNumber.ifPresent(number -> numberRepository.delete(number));
 
         entryRepository.delete(entry);
-
         return new ResponseEntity<Entry>(entry, HttpStatus.OK);
     }
 
