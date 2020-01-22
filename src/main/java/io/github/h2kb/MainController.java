@@ -12,6 +12,8 @@ import io.github.h2kb.repository.PhoneBookRepository;
 import io.github.h2kb.repository.UserRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,11 +50,34 @@ public class MainController {
     public @ResponseBody
     User getUser(@RequestParam String id) throws NotFoundException {
         Optional<User> optionalUser = userRepository.findById(Integer.parseInt(id));
+
         if (optionalUser.isPresent()) {
             return optionalUser.get();
         } else {
             throw new NotFoundException("User with id " + id + " is not found.");
         }
+    }
+
+    @DeleteMapping(path = "delete_user")
+    public @ResponseBody
+    ResponseEntity<User> deleteUser(@RequestParam String id) {
+        User user;
+        Optional<User> optionalUser = userRepository.findById(Integer.parseInt(id));
+
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
+        } else {
+            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+        }
+
+        Optional<PhoneBook> optionalPhoneBook = phoneBookRepository.findByOwner(user);
+
+        if (optionalPhoneBook.isPresent()) {
+            phoneBookRepository.delete(optionalPhoneBook.get());
+        }
+
+        userRepository.delete(user);
+        return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
     @PostMapping(path = "/add_number")
@@ -69,6 +94,29 @@ public class MainController {
         entryRepository.save(entry);
         numberRepository.save(number);
         return "Saved";
+    }
+
+    @DeleteMapping(path = "delete_number")
+    public @ResponseBody
+    ResponseEntity<Entry> deleteNumber(@RequestParam String id) {
+        Entry entry;
+        Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(id));
+
+        if (optionalEntry.isPresent()) {
+            entry = optionalEntry.get();
+        } else {
+            return new ResponseEntity<Entry>(HttpStatus.NOT_FOUND);
+        }
+
+        Optional<Number> optionalNumber = numberRepository.findByEntry(entry);
+
+        if (optionalNumber.isPresent()) {
+            numberRepository.delete(optionalNumber.get());
+        }
+
+        entryRepository.delete(entry);
+
+        return new ResponseEntity<Entry>(entry, HttpStatus.OK);
     }
 
     @GetMapping(path = "/get_all_users")
