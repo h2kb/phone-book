@@ -114,6 +114,21 @@ public class MainController {
         return "Saved";
     }
 
+    @GetMapping(path = "/get_number")
+    public @ResponseBody
+    ResponseEntity<Entry> getNumber(@RequestParam String id) {
+        Entry entry;
+        Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(id));
+
+        if (optionalEntry.isPresent()) {
+            entry = optionalEntry.get();
+        } else {
+            return new ResponseEntity<Entry>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<Entry>(entry, HttpStatus.OK);
+    }
+
     @DeleteMapping(path = "delete_number")
     public @ResponseBody
     ResponseEntity<Entry> deleteNumber(@RequestParam String id) {
