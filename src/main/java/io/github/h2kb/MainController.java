@@ -197,6 +197,28 @@ public class MainController {
         return new ResponseEntity<Number>(number, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/get_user_phone_book")
+    public @ResponseBody
+    ResponseEntity<PhoneBook> getUserPhoneBook(@RequestParam String ownerId) {
+        User user;
+        PhoneBook phoneBook = null;
+        Optional<User> optionalUser = userRepository.findById(Integer.parseInt(ownerId));
+
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Optional<PhoneBook> optionalPhoneBook = phoneBookRepository.findByOwner(user);
+
+        if (optionalPhoneBook.isPresent()) {
+            phoneBook = optionalPhoneBook.get();
+        }
+
+        return new ResponseEntity<PhoneBook>(phoneBook, HttpStatus.OK);
+    }
+
     @GetMapping(path = "/get_all_users")
     public @ResponseBody
     Iterable<User> getAllUser() {

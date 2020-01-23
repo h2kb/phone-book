@@ -21,7 +21,7 @@ public class Entry {
     @JoinColumn(name = "phone_book_id", nullable = false, foreignKey = @ForeignKey(name = "phone_book_id"))
     private PhoneBook phoneBook;
 
-    @OneToMany(mappedBy = "entry", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "entry", fetch = FetchType.LAZY)
     private Collection<Number> numbers;
 
     @Enumerated(EnumType.ORDINAL)
@@ -48,9 +48,9 @@ public class Entry {
         return name;
     }
 
-    public PhoneBook getPhoneBook() {
-        return phoneBook;
-    }
+//    public PhoneBook getPhoneBook() {
+//        return phoneBook;
+//    }
 
     public EntryType getEntryType() {
         return entryType;

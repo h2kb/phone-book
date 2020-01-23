@@ -1,6 +1,7 @@
 package io.github.h2kb.entity;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "phone_book")
@@ -15,6 +16,9 @@ public class PhoneBook {
     @JoinColumn(name = "owner_id", nullable = false, foreignKey = @ForeignKey(name = "owner_id"))
     private User owner;
 
+    @OneToMany(mappedBy = "phoneBook", fetch = FetchType.LAZY)
+    private Collection<Entry> entries;
+
     public PhoneBook() {
     }
 
@@ -28,5 +32,9 @@ public class PhoneBook {
 
     public Integer getOwner() {
         return owner.getId();
+    }
+
+    public Collection<Entry> getEntries() {
+        return entries;
     }
 }
