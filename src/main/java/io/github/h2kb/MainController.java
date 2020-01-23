@@ -36,13 +36,13 @@ public class MainController {
 
     @PostMapping(path = "/add_user")
     public @ResponseBody
-    String addNewUser(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String login) {
+    ResponseEntity<User> addNewUser(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String login) {
         User user = new User(firstName, lastName, login);
         PhoneBook phoneBook = new PhoneBook(user);
 
         userRepository.save(user);
         phoneBookRepository.save(phoneBook);
-        return "Saved";
+        return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
     @GetMapping(path = "/get_user")

@@ -20,6 +20,9 @@ public class User {
     @Column(name = "login", nullable = false, unique = true)
     private String login;
 
+    @OneToOne(mappedBy = "owner")
+    PhoneBook phoneBook;
+
     public User() {
     }
 
@@ -51,5 +54,9 @@ public class User {
 
     public String getLogin() {
         return login;
+    }
+
+    public PhoneBook getPhoneBook() {
+        return phoneBook;
     }
 }

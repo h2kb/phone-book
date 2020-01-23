@@ -11,7 +11,7 @@ public class PhoneBook {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(name = "owner_id", nullable = false, foreignKey = @ForeignKey(name = "owner_id"))
     private User owner;
 
