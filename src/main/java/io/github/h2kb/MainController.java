@@ -161,7 +161,7 @@ public class MainController {
         return new ResponseEntity<Entry>(entry, HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "delete_entry")
+    @DeleteMapping(path = "/delete_entry")
     public @ResponseBody
     ResponseEntity<Entry> deleteEntry(@RequestParam String id) {
         Entry entry;
@@ -178,6 +178,23 @@ public class MainController {
 
         entryRepository.delete(entry);
         return new ResponseEntity<Entry>(entry, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/add_number")
+    public @ResponseBody
+    ResponseEntity<Number> addNumber(@RequestParam String entryId, @RequestParam NumberType numberType, @RequestParam String phoneNumber) {
+        Entry entry;
+        Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(entryId));
+
+        if(optionalEntry.isPresent()) {
+            entry = optionalEntry.get();
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Number number = new Number(entry, phoneNumber, numberType);
+        numberRepository.save(number);
+        return new ResponseEntity<Number>(number, HttpStatus.OK);
     }
 
     @GetMapping(path = "/get_all_users")
