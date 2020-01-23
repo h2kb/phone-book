@@ -98,9 +98,9 @@ public class MainController {
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/add_number")
+    @PostMapping(path = "/add_entry")
     public @ResponseBody
-    ResponseEntity<Entry> addNewNumber(@RequestParam String ownerId, @RequestParam EntryType entryType, @RequestParam String phoneNumber,
+    ResponseEntity<Entry> addEntry(@RequestParam String ownerId, @RequestParam EntryType entryType, @RequestParam String phoneNumber,
                         @RequestParam String name, @RequestParam(defaultValue = "NULL") NumberType numberType) {
         User user;
         PhoneBook phoneBook = null;
@@ -124,9 +124,9 @@ public class MainController {
         return new ResponseEntity<Entry>(entry, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/get_number")
+    @GetMapping(path = "/get_entry")
     public @ResponseBody
-    ResponseEntity<Entry> getNumber(@RequestParam String id) {
+    ResponseEntity<Entry> getEntry(@RequestParam String id) {
         Entry entry;
         Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(id));
 
@@ -139,9 +139,9 @@ public class MainController {
         return new ResponseEntity<Entry>(entry, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/update_number")
+    @PostMapping(path = "/update_entry")
     public @ResponseBody
-    ResponseEntity<Entry> updateNumber(@RequestParam String id, String entryName) {
+    ResponseEntity<Entry> updateEntry(@RequestParam String id, String entryName) {
         Entry entry;
         Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(id));
 
@@ -161,9 +161,9 @@ public class MainController {
         return new ResponseEntity<Entry>(entry, HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "delete_number")
+    @DeleteMapping(path = "delete_entry")
     public @ResponseBody
-    ResponseEntity<Entry> deleteNumber(@RequestParam String id) {
+    ResponseEntity<Entry> deleteEntry(@RequestParam String id) {
         Entry entry;
         Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(id));
 
