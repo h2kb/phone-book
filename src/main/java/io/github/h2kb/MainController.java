@@ -100,18 +100,28 @@ public class MainController {
 
     @PostMapping(path = "/add_number")
     public @ResponseBody
-    String addNewNumber(@RequestParam String ownerId, @RequestParam EntryType entryType, @RequestParam String phoneNumber,
+    ResponseEntity<Entry> addNewNumber(@RequestParam String ownerId, @RequestParam EntryType entryType, @RequestParam String phoneNumber,
                         @RequestParam String name, @RequestParam(defaultValue = "NULL") NumberType numberType) {
+        User user;
+        PhoneBook phoneBook = null;
         Optional<User> optionalUser = userRepository.findById(Integer.parseInt(ownerId));
-        User user = optionalUser.orElseGet(User::new);
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
+        } else {
+            return new ResponseEntity<Entry>(HttpStatus.NOT_FOUND);
+        }
+
         Optional<PhoneBook> optionalPhoneBook = phoneBookRepository.findByOwner(user);
-        PhoneBook phoneBook = optionalPhoneBook.orElseGet(PhoneBook::new);
+
+        if (optionalPhoneBook.isPresent()) {
+            phoneBook = optionalPhoneBook.get();
+        }
         Entry entry = new Entry(phoneBook, name, entryType);
         Number number = new Number(entry, phoneNumber, numberType);
 
         entryRepository.save(entry);
         numberRepository.save(number);
-        return "Saved";
+        return new ResponseEntity<Entry>(entry, HttpStatus.OK);
     }
 
     @GetMapping(path = "/get_number")
