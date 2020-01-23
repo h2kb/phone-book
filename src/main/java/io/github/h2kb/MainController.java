@@ -129,6 +129,28 @@ public class MainController {
         return new ResponseEntity<Entry>(entry, HttpStatus.OK);
     }
 
+    @PostMapping(path = "/update_number")
+    public @ResponseBody
+    ResponseEntity<Entry> updateNumber(@RequestParam String id, String entryName) {
+        Entry entry;
+        Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(id));
+
+        if (optionalEntry.isPresent()) {
+            entry = optionalEntry.get();
+        } else {
+            return new ResponseEntity<Entry>(HttpStatus.NOT_FOUND);
+        }
+
+        if (entryName.isEmpty()) {
+            return new ResponseEntity<Entry>(entry, HttpStatus.OK);
+        } else {
+            entry.setName(entryName);
+        }
+
+        entryRepository.save(entry);
+        return new ResponseEntity<Entry>(entry, HttpStatus.OK);
+    }
+
     @DeleteMapping(path = "delete_number")
     public @ResponseBody
     ResponseEntity<Entry> deleteNumber(@RequestParam String id) {
