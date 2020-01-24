@@ -1,7 +1,6 @@
 package io.github.h2kb.service.impl;
 
 import io.github.h2kb.entity.Entry;
-import io.github.h2kb.entity.Number;
 import io.github.h2kb.entity.PhoneBook;
 import io.github.h2kb.entity.User;
 import io.github.h2kb.entity.enums.EntryType;
@@ -48,6 +47,23 @@ public class EntryServiceImpl implements EntryService {
         }
 
         Entry entry = new Entry(phoneBook, entryName, entryType);
+        entryRepository.save(entry);
+
+        return entry;
+    }
+
+    @Override
+    public Entry editEntryName(String entryId, String entryName) throws NotFoundException {
+        Entry entry;
+        Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(entryId));
+
+        if (optionalEntry.isPresent()) {
+            entry = optionalEntry.get();
+        } else {
+            throw new NotFoundException(NOT_FOUND);
+        }
+
+        entry.setName(entryName);
         entryRepository.save(entry);
 
         return entry;

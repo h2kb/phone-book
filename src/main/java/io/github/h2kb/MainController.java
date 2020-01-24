@@ -76,9 +76,10 @@ public class MainController {
     public @ResponseBody
     ResponseEntity<Entry> addEntry(@RequestParam String ownerId, @RequestParam EntryType entryType, @RequestParam String entryName) {
 
-        return new ResponseEntity<Entry>(entryService.addEntry(ownerId,entryType, entryName), HttpStatus.OK);
+        return new ResponseEntity<Entry>(entryService.addEntry(ownerId, entryType, entryName), HttpStatus.OK);
     }
-//
+
+    //
     @GetMapping(path = "/get_entry")
     public @ResponseBody
     ResponseEntity<Entry> getEntry(@RequestParam String entryId) throws NotFoundException {
@@ -86,48 +87,32 @@ public class MainController {
         return new ResponseEntity<Entry>(entryService.getEntry(entryId), HttpStatus.OK);
     }
 
-    //
-//    @PostMapping(path = "/update_entry")
-//    public @ResponseBody
-//    ResponseEntity<Entry> updateEntry(@RequestParam String id, String entryName) {
-//        Entry entry;
-//        Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(id));
-//
-//        if (optionalEntry.isPresent()) {
-//            entry = optionalEntry.get();
-//        } else {
-//            return new ResponseEntity<Entry>(HttpStatus.NOT_FOUND);
-//        }
-//
-//        if (entryName.isEmpty()) {
-//            return new ResponseEntity<Entry>(entry, HttpStatus.OK);
-//        } else {
-//            entry.setName(entryName);
-//        }
-//
-//        entryRepository.save(entry);
-//        return new ResponseEntity<Entry>(entry, HttpStatus.OK);
-//    }
-//
-//    @DeleteMapping(path = "/delete_entry")
-//    public @ResponseBody
-//    ResponseEntity<Entry> deleteEntry(@RequestParam String id) {
-//        Entry entry;
-//        Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(id));
-//
-//        if (optionalEntry.isPresent()) {
-//            entry = optionalEntry.get();
-//        } else {
-//            return new ResponseEntity<Entry>(HttpStatus.NOT_FOUND);
-//        }
-//
-//        Optional<Number> optionalNumber = numberRepository.findByEntry(entry);
-//        optionalNumber.ifPresent(number -> numberRepository.delete(number));
-//
-//        entryRepository.delete(entry);
-//        return new ResponseEntity<Entry>(entry, HttpStatus.OK);
-//    }
-//
+    @PostMapping(path = "/edit_entry_name")
+    public @ResponseBody
+    ResponseEntity<Entry> editEntryName(@RequestParam String entryId, @RequestParam String entryName) throws NotFoundException {
+
+        return new ResponseEntity<Entry>(entryService.editEntryName(entryId, entryName), HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/delete_entry")
+    public @ResponseBody
+    ResponseEntity<Entry> deleteEntry(@RequestParam String id) {
+        Entry entry;
+        Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(id));
+
+        if (optionalEntry.isPresent()) {
+            entry = optionalEntry.get();
+        } else {
+            return new ResponseEntity<Entry>(HttpStatus.NOT_FOUND);
+        }
+
+        Optional<Number> optionalNumber = numberRepository.findByEntry(entry);
+        optionalNumber.ifPresent(number -> numberRepository.delete(number));
+
+        entryRepository.delete(entry);
+        return new ResponseEntity<Entry>(entry, HttpStatus.OK);
+    }
+
     @PostMapping(path = "/add_number")
     public @ResponseBody
     ResponseEntity<Number> addNumber(@RequestParam String entryId, @RequestParam(defaultValue = "NULL") NumberType numberType, @RequestParam String phoneNumber) throws NotFoundException {

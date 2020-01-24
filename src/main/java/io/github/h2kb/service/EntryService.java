@@ -8,5 +8,7 @@ public interface EntryService extends SimpleService {
 
     Entry addEntry(String ownerId, EntryType entryType, String entryName) throws NotFoundException;
 
+    Entry editEntryName(String entryId, String entryName) throws NotFoundException;
+
     Entry getEntry(String entryId) throws NotFoundException;
 }
