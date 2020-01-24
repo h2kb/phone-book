@@ -32,6 +32,10 @@ public class Number {
         this.numberType = numberType;
     }
 
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
     public Integer getId() {
         return id;
     }

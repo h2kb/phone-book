@@ -38,8 +38,19 @@ public class NumberServiceImpl implements NumberService {
     }
 
     @Override
-    public Number editNumber(String numberId, String number) throws NotFoundException {
-        return null;
+    public Number editPhoneNumber(String numberId, String phoneNumber) throws NotFoundException {
+        Number number;
+        Optional<Number> optionalNumber = numberRepository.findById(Integer.parseInt(numberId));
+
+        if (optionalNumber.isPresent()) {
+            number = optionalNumber.get();
+        } else {
+            throw new NotFoundException(NOT_FOUND);
+        }
+
+        number.setNumber(phoneNumber);
+        numberRepository.save(number);
+        return number;
     }
 
     @Override

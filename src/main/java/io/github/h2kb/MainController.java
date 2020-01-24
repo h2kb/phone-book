@@ -150,9 +150,16 @@ public class MainController {
 //
     @PostMapping(path = "/add_number")
     public @ResponseBody
-    ResponseEntity<Number> addNumber(@RequestParam String entryId, @RequestParam NumberType numberType, @RequestParam String number) throws NotFoundException {
+    ResponseEntity<Number> addNumber(@RequestParam String entryId, @RequestParam NumberType numberType, @RequestParam String phoneNumber) throws NotFoundException {
 
-        return new ResponseEntity<Number>(numberService.addNumber(entryId, numberType, number), HttpStatus.OK);
+        return new ResponseEntity<Number>(numberService.addNumber(entryId, numberType, phoneNumber), HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/edit_phone_number")
+    public @ResponseBody
+    ResponseEntity<Number> editPhoneNumber(@RequestParam String numberId, @RequestParam String phoneNumber) throws NotFoundException {
+
+        return new ResponseEntity<Number>(numberService.editPhoneNumber(numberId, phoneNumber), HttpStatus.OK);
     }
 //
 //    @GetMapping(path = "/get_user_phone_book")
