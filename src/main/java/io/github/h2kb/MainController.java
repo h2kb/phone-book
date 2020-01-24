@@ -71,7 +71,6 @@ public class MainController {
         return new ResponseEntity<User>(userService.deleteUser(userId), HttpStatus.OK);
     }
 
-
     @PostMapping(path = "/add_entry")
     public @ResponseBody
     ResponseEntity<Entry> addEntry(@RequestParam String ownerId, @RequestParam EntryType entryType, @RequestParam String entryName) throws NotFoundException {
@@ -79,7 +78,6 @@ public class MainController {
         return new ResponseEntity<Entry>(entryService.addEntry(ownerId, entryType, entryName), HttpStatus.OK);
     }
 
-    //
     @GetMapping(path = "/get_entry")
     public @ResponseBody
     ResponseEntity<Entry> getEntry(@RequestParam String entryId) throws NotFoundException {
