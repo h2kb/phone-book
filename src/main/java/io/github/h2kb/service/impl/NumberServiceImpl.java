@@ -55,6 +55,16 @@ public class NumberServiceImpl implements NumberService {
 
     @Override
     public Number deleteNumber(String numberId) throws NotFoundException {
-        return null;
+        Number number;
+        Optional<Number> optionalNumber = numberRepository.findById(Integer.parseInt(numberId));
+
+        if (optionalNumber.isPresent()) {
+            number = optionalNumber.get();
+        } else {
+            throw new NotFoundException(NOT_FOUND);
+        }
+
+        numberRepository.delete(number);
+        return number;
     }
 }

@@ -73,7 +73,8 @@ public class MainController {
 
         return new ResponseEntity<User>(userService.deleteUser(userId), HttpStatus.OK);
     }
-//
+
+    //
 //    @PostMapping(path = "/add_entry")
 //    public @ResponseBody
 //    ResponseEntity<Entry> addEntry(@RequestParam String ownerId, @RequestParam EntryType entryType, @RequestParam String phoneNumber,
@@ -106,7 +107,8 @@ public class MainController {
 
         return new ResponseEntity<Entry>(entryService.getEntry(entryId), HttpStatus.OK);
     }
-//
+
+    //
 //    @PostMapping(path = "/update_entry")
 //    public @ResponseBody
 //    ResponseEntity<Entry> updateEntry(@RequestParam String id, String entryName) {
@@ -160,6 +162,13 @@ public class MainController {
     ResponseEntity<Number> editPhoneNumber(@RequestParam String numberId, @RequestParam String phoneNumber) throws NotFoundException {
 
         return new ResponseEntity<Number>(numberService.editPhoneNumber(numberId, phoneNumber), HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/delete_number")
+    public @ResponseBody
+    ResponseEntity<Number> deleteNumber(@RequestParam String numberId) throws NotFoundException {
+
+        return new ResponseEntity<Number>(numberService.deleteNumber(numberId), HttpStatus.OK);
     }
 //
 //    @GetMapping(path = "/get_user_phone_book")
