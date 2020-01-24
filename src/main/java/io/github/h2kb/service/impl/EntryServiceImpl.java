@@ -1,17 +1,17 @@
 package io.github.h2kb.service.impl;
 
 import io.github.h2kb.entity.Entry;
+import io.github.h2kb.entity.Number;
 import io.github.h2kb.entity.PhoneBook;
 import io.github.h2kb.entity.User;
 import io.github.h2kb.entity.enums.EntryType;
 import io.github.h2kb.repository.EntryRepository;
+import io.github.h2kb.repository.NumberRepository;
 import io.github.h2kb.repository.PhoneBookRepository;
 import io.github.h2kb.repository.UserRepository;
 import io.github.h2kb.service.EntryService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -27,6 +27,9 @@ public class EntryServiceImpl implements EntryService {
 
     @Autowired
     private PhoneBookRepository phoneBookRepository;
+
+    @Autowired
+    private NumberRepository numberRepository;
 
     @Override
     public Entry addEntry(String ownerId, EntryType entryType, String entryName) throws NotFoundException {
@@ -79,6 +82,24 @@ public class EntryServiceImpl implements EntryService {
         } else {
             throw new NotFoundException(NOT_FOUND);
         }
+
+        return entry;
+    }
+
+    @Override
+    public Entry deleteEntry(String entryId) throws NotFoundException {
+        Entry entry;
+        Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(entryId));
+
+        if (optionalEntry.isPresent()) {
+            entry = optionalEntry.get();
+        } else {
+            throw new NotFoundException(NOT_FOUND);
+        }
+
+        Optional<Number> optionalNumber = numberRepository.findByEntry(entry);
+        optionalNumber.ifPresent(number -> numberRepository.delete(number));
+        entryRepository.delete(entry);
 
         return entry;
     }

@@ -11,4 +11,6 @@ public interface EntryService extends SimpleService {
     Entry editEntryName(String entryId, String entryName) throws NotFoundException;
 
     Entry getEntry(String entryId) throws NotFoundException;
+
+    Entry deleteEntry(String entryId) throws NotFoundException;
 }

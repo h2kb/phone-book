@@ -74,7 +74,7 @@ public class MainController {
 
     @PostMapping(path = "/add_entry")
     public @ResponseBody
-    ResponseEntity<Entry> addEntry(@RequestParam String ownerId, @RequestParam EntryType entryType, @RequestParam String entryName) {
+    ResponseEntity<Entry> addEntry(@RequestParam String ownerId, @RequestParam EntryType entryType, @RequestParam String entryName) throws NotFoundException {
 
         return new ResponseEntity<Entry>(entryService.addEntry(ownerId, entryType, entryName), HttpStatus.OK);
     }
@@ -96,21 +96,9 @@ public class MainController {
 
     @DeleteMapping(path = "/delete_entry")
     public @ResponseBody
-    ResponseEntity<Entry> deleteEntry(@RequestParam String id) {
-        Entry entry;
-        Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(id));
+    ResponseEntity<Entry> deleteEntry(@RequestParam String entryId) throws NotFoundException {
 
-        if (optionalEntry.isPresent()) {
-            entry = optionalEntry.get();
-        } else {
-            return new ResponseEntity<Entry>(HttpStatus.NOT_FOUND);
-        }
-
-        Optional<Number> optionalNumber = numberRepository.findByEntry(entry);
-        optionalNumber.ifPresent(number -> numberRepository.delete(number));
-
-        entryRepository.delete(entry);
-        return new ResponseEntity<Entry>(entry, HttpStatus.OK);
+        return new ResponseEntity<Entry>(entryService.deleteEntry(entryId), HttpStatus.OK);
     }
 
     @PostMapping(path = "/add_number")
