@@ -16,7 +16,7 @@ public class PhoneBook {
     @JoinColumn(name = "owner_id", nullable = false, foreignKey = @ForeignKey(name = "owner_id"))
     private User owner;
 
-    @OneToMany(mappedBy = "phoneBook", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "phoneBook", fetch = FetchType.EAGER)
     private Collection<Entry> entries;
 
     public PhoneBook() {

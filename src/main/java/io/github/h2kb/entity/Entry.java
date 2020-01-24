@@ -48,10 +48,6 @@ public class Entry {
         return name;
     }
 
-//    public PhoneBook getPhoneBook() {
-//        return phoneBook;
-//    }
-
     public EntryType getEntryType() {
         return entryType;
     }
