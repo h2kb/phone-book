@@ -14,8 +14,6 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static String NOT_FOUND = "No records exist for given id.";
-
     @Autowired
     private UserRepository userRepository;
 

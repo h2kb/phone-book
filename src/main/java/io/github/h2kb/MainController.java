@@ -10,6 +10,8 @@ import io.github.h2kb.repository.EntryRepository;
 import io.github.h2kb.repository.NumberRepository;
 import io.github.h2kb.repository.PhoneBookRepository;
 import io.github.h2kb.repository.UserRepository;
+import io.github.h2kb.service.EntryService;
+import io.github.h2kb.service.impl.NumberServiceImpl;
 import io.github.h2kb.service.impl.UserServiceImpl;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +29,11 @@ public class MainController {
     @Autowired
     private UserServiceImpl userService;
 
-//    @Autowired
-//    private PhoneBookRepository phoneBookRepository;
-//
-//    @Autowired
-//    private EntryRepository entryRepository;
+    @Autowired
+    private NumberServiceImpl numberService;
+
+    @Autowired
+    private EntryService entryService;
 //
 //    @Autowired
 //    private NumberRepository numberRepository;
@@ -98,20 +100,12 @@ public class MainController {
 //        return new ResponseEntity<Entry>(entry, HttpStatus.OK);
 //    }
 //
-//    @GetMapping(path = "/get_entry")
-//    public @ResponseBody
-//    ResponseEntity<Entry> getEntry(@RequestParam String id) {
-//        Entry entry;
-//        Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(id));
-//
-//        if (optionalEntry.isPresent()) {
-//            entry = optionalEntry.get();
-//        } else {
-//            return new ResponseEntity<Entry>(HttpStatus.NOT_FOUND);
-//        }
-//
-//        return new ResponseEntity<Entry>(entry, HttpStatus.OK);
-//    }
+    @GetMapping(path = "/get_entry")
+    public @ResponseBody
+    ResponseEntity<Entry> getEntry(@RequestParam String entryId) throws NotFoundException {
+
+        return new ResponseEntity<Entry>(entryService.getEntry(entryId), HttpStatus.OK);
+    }
 //
 //    @PostMapping(path = "/update_entry")
 //    public @ResponseBody
@@ -154,22 +148,12 @@ public class MainController {
 //        return new ResponseEntity<Entry>(entry, HttpStatus.OK);
 //    }
 //
-//    @PostMapping(path = "/add_number")
-//    public @ResponseBody
-//    ResponseEntity<Number> addNumber(@RequestParam String entryId, @RequestParam NumberType numberType, @RequestParam String phoneNumber) {
-//        Entry entry;
-//        Optional<Entry> optionalEntry = entryRepository.findById(Integer.parseInt(entryId));
-//
-//        if (optionalEntry.isPresent()) {
-//            entry = optionalEntry.get();
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//
-//        Number number = new Number(entry, phoneNumber, numberType);
-//        numberRepository.save(number);
-//        return new ResponseEntity<Number>(number, HttpStatus.OK);
-//    }
+    @PostMapping(path = "/add_number")
+    public @ResponseBody
+    ResponseEntity<Number> addNumber(@RequestParam String entryId, @RequestParam NumberType numberType, @RequestParam String number) throws NotFoundException {
+
+        return new ResponseEntity<Number>(numberService.addNumber(entryId, numberType, number), HttpStatus.OK);
+    }
 //
 //    @GetMapping(path = "/get_user_phone_book")
 //    public @ResponseBody
