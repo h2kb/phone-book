@@ -10,7 +10,7 @@ import io.github.h2kb.repository.EntryRepository;
 import io.github.h2kb.repository.NumberRepository;
 import io.github.h2kb.repository.PhoneBookRepository;
 import io.github.h2kb.repository.UserRepository;
-import io.github.h2kb.service.EntryService;
+import io.github.h2kb.service.impl.EntryServiceImpl;
 import io.github.h2kb.service.impl.NumberServiceImpl;
 import io.github.h2kb.service.impl.UserServiceImpl;
 import javassist.NotFoundException;
@@ -33,10 +33,7 @@ public class MainController {
     private NumberServiceImpl numberService;
 
     @Autowired
-    private EntryService entryService;
-//
-//    @Autowired
-//    private NumberRepository numberRepository;
+    private EntryServiceImpl entryService;
 
     @PostMapping(path = "/add_user")
     public @ResponseBody
@@ -74,32 +71,13 @@ public class MainController {
         return new ResponseEntity<User>(userService.deleteUser(userId), HttpStatus.OK);
     }
 
-    //
-//    @PostMapping(path = "/add_entry")
-//    public @ResponseBody
-//    ResponseEntity<Entry> addEntry(@RequestParam String ownerId, @RequestParam EntryType entryType, @RequestParam String phoneNumber,
-//                                   @RequestParam String name, @RequestParam(defaultValue = "NULL") NumberType numberType) {
-//        User user;
-//        PhoneBook phoneBook = null;
-//        Optional<User> optionalUser = userRepository.findById(Integer.parseInt(ownerId));
-//        if (optionalUser.isPresent()) {
-//            user = optionalUser.get();
-//        } else {
-//            return new ResponseEntity<Entry>(HttpStatus.NOT_FOUND);
-//        }
-//
-//        Optional<PhoneBook> optionalPhoneBook = phoneBookRepository.findByOwner(user);
-//
-//        if (optionalPhoneBook.isPresent()) {
-//            phoneBook = optionalPhoneBook.get();
-//        }
-//        Entry entry = new Entry(phoneBook, name, entryType);
-//        Number number = new Number(entry, phoneNumber, numberType);
-//
-//        entryRepository.save(entry);
-//        numberRepository.save(number);
-//        return new ResponseEntity<Entry>(entry, HttpStatus.OK);
-//    }
+
+    @PostMapping(path = "/add_entry")
+    public @ResponseBody
+    ResponseEntity<Entry> addEntry(@RequestParam String ownerId, @RequestParam EntryType entryType, @RequestParam String entryName) {
+
+        return new ResponseEntity<Entry>(entryService.addEntry(ownerId,entryType, entryName), HttpStatus.OK);
+    }
 //
     @GetMapping(path = "/get_entry")
     public @ResponseBody
@@ -152,7 +130,7 @@ public class MainController {
 //
     @PostMapping(path = "/add_number")
     public @ResponseBody
-    ResponseEntity<Number> addNumber(@RequestParam String entryId, @RequestParam NumberType numberType, @RequestParam String phoneNumber) throws NotFoundException {
+    ResponseEntity<Number> addNumber(@RequestParam String entryId, @RequestParam(defaultValue = "NULL") NumberType numberType, @RequestParam String phoneNumber) throws NotFoundException {
 
         return new ResponseEntity<Number>(numberService.addNumber(entryId, numberType, phoneNumber), HttpStatus.OK);
     }
