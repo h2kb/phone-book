@@ -2,14 +2,9 @@ package io.github.h2kb;
 
 import io.github.h2kb.entity.Entry;
 import io.github.h2kb.entity.Number;
-import io.github.h2kb.entity.PhoneBook;
 import io.github.h2kb.entity.User;
 import io.github.h2kb.entity.enums.EntryType;
 import io.github.h2kb.entity.enums.NumberType;
-import io.github.h2kb.repository.EntryRepository;
-import io.github.h2kb.repository.NumberRepository;
-import io.github.h2kb.repository.PhoneBookRepository;
-import io.github.h2kb.repository.UserRepository;
 import io.github.h2kb.service.impl.EntryServiceImpl;
 import io.github.h2kb.service.impl.NumberServiceImpl;
 import io.github.h2kb.service.impl.UserServiceImpl;
@@ -19,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping(path = "/phone_book")
