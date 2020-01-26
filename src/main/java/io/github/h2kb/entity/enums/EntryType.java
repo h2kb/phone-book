@@ -1,6 +1,6 @@
 package io.github.h2kb.entity.enums;
 
-public enum  EntryType {
+public enum EntryType {
     HUMAN,
     COMPANY;
 }

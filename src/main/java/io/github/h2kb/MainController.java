@@ -1,7 +1,9 @@
 package io.github.h2kb;
 
+import io.github.h2kb.dto.UserDto;
 import io.github.h2kb.entity.Entry;
 import io.github.h2kb.entity.Number;
+import io.github.h2kb.entity.PhoneBook;
 import io.github.h2kb.entity.User;
 import io.github.h2kb.entity.enums.EntryType;
 import io.github.h2kb.entity.enums.NumberType;
@@ -38,9 +40,9 @@ public class MainController {
 
     @GetMapping(path = "/get_user")
     public @ResponseBody
-    ResponseEntity<User> getUser(@RequestParam String userId) throws NotFoundException {
+    ResponseEntity<UserDto> getUser(@RequestParam String userId) throws NotFoundException {
 
-        return new ResponseEntity<User>(userService.getUser(userId), HttpStatus.OK);
+        return new ResponseEntity<UserDto>(userService.getUser(userId), HttpStatus.OK);
     }
 
     @PutMapping(path = "/edit_user_first_name")
@@ -112,32 +114,17 @@ public class MainController {
 
         return new ResponseEntity<Number>(numberService.deleteNumber(numberId), HttpStatus.OK);
     }
-//
-//    @GetMapping(path = "/get_user_phone_book")
-//    public @ResponseBody
-//    ResponseEntity<PhoneBook> getUserPhoneBook(@RequestParam String ownerId) {
-//        User user;
-//        PhoneBook phoneBook = null;
-//        Optional<User> optionalUser = userRepository.findById(Integer.parseInt(ownerId));
-//
-//        if (optionalUser.isPresent()) {
-//            user = optionalUser.get();
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//
-//        Optional<PhoneBook> optionalPhoneBook = phoneBookRepository.findByOwner(user);
-//
-//        if (optionalPhoneBook.isPresent()) {
-//            phoneBook = optionalPhoneBook.get();
-//        }
-//
-//        return new ResponseEntity<PhoneBook>(phoneBook, HttpStatus.OK);
-//    }
-//
-//    @GetMapping(path = "/get_all_users")
-//    public @ResponseBody
-//    Iterable<User> getAllUser() {
-//        return userRepository.findAll();
-//    }
+
+    @GetMapping(path = "/get_user_phone_book")
+    public @ResponseBody
+    ResponseEntity<PhoneBook> getUserPhoneBook(@RequestParam String userId) throws NotFoundException {
+
+        return new ResponseEntity<PhoneBook>(userService.getUserPhoneBook(userId), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/get_all_users")
+    public @ResponseBody
+    ResponseEntity<Iterable<UserDto>> getAllUser() {
+        return new ResponseEntity<Iterable<UserDto>>(userService.getAllUsers(), HttpStatus.OK);
+    }
 }

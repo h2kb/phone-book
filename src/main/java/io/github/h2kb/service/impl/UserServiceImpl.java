@@ -1,5 +1,7 @@
 package io.github.h2kb.service.impl;
 
+import io.github.h2kb.dto.DtoConverter;
+import io.github.h2kb.dto.UserDto;
 import io.github.h2kb.entity.PhoneBook;
 import io.github.h2kb.entity.User;
 import io.github.h2kb.repository.PhoneBookRepository;
@@ -9,7 +11,9 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,6 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PhoneBookRepository phoneBookRepository;
+
+    @Autowired
+    private DtoConverter dtoConverter;
 
     @Override
     public User addUser(String firstName, String lastName, String login) {
@@ -31,11 +38,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(String userId) throws NotFoundException {
+    public UserDto getUser(String userId) throws NotFoundException {
         Optional<User> optionalUser = userRepository.findById(Integer.parseInt(userId));
 
         if (optionalUser.isPresent()) {
-            return optionalUser.get();
+            return dtoConverter.userToUserDto(optionalUser.get());
         } else {
             throw new NotFoundException(NOT_FOUND);
         }
@@ -89,5 +96,33 @@ public class UserServiceImpl implements UserService {
 
         userRepository.delete(user);
         return user;
+    }
+
+    @Override
+    public PhoneBook getUserPhoneBook(String userId) throws NotFoundException {
+        User user;
+        PhoneBook phoneBook = new PhoneBook();
+        Optional<User> optionalUser = userRepository.findById(Integer.parseInt(userId));
+
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
+        } else {
+            throw new NotFoundException(NOT_FOUND);
+        }
+
+        Optional<PhoneBook> optionalPhoneBook = phoneBookRepository.findByOwner(user);
+
+        if (optionalPhoneBook.isPresent()) {
+            phoneBook = optionalPhoneBook.get();
+        }
+
+        return phoneBook;
+    }
+
+    @Override
+    public Iterable<UserDto> getAllUsers() {
+        ArrayList<User> users = (ArrayList<User>) userRepository.findAll();
+
+        return (ArrayList<UserDto>) users.stream().map(s -> dtoConverter.userToUserDto(s)).collect(Collectors.toList());
     }
 }

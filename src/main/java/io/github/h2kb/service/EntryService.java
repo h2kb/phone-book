@@ -4,7 +4,7 @@ import io.github.h2kb.entity.Entry;
 import io.github.h2kb.entity.enums.EntryType;
 import javassist.NotFoundException;
 
-public interface EntryService extends SimpleService {
+public interface EntryService extends CommonService {
 
     Entry addEntry(String ownerId, EntryType entryType, String entryName) throws NotFoundException;
 
